@@ -1,0 +1,22 @@
+{
+  "name": "telegram-miniapp-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot that opens Mini App registration page",
+  "main": "src/bot.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/bot.js",
+    "start": "node src/bot.js"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "mini-app"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}
