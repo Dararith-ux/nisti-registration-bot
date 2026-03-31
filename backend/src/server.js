@@ -12,15 +12,36 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+const allowedOrigins = (process.env.FRONTEND_URL || '*')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+  .map((origin) => origin.replace(/\/+$/, ''));
+
+const corsOptions = allowedOrigins.includes('*')
+  ? { origin: '*' }
+  : {
+      origin: (requestOrigin, callback) => {
+        if (!requestOrigin) {
+          callback(null, true);
+          return;
+        }
+
+        const normalizedOrigin = requestOrigin.replace(/\/+$/, '');
+        if (allowedOrigins.includes(normalizedOrigin)) {
+          callback(null, true);
+          return;
+        }
+
+        callback(new Error('CORS blocked for this origin'));
+      }
+    };
+
 // Connect MongoDB once at server startup.
 await connectDB();
 
 // Allow frontend Mini App origin and local development.
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || '*'
-  })
-);
+app.use(cors(corsOptions));
 
 app.use(morgan('dev'));
 app.use(express.json());

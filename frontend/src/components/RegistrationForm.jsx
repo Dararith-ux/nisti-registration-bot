@@ -64,9 +64,16 @@ const RegistrationForm = ({ telegramUser }) => {
       });
       setFormData(initialFormState);
     } catch (error) {
+      const message =
+        error instanceof TypeError
+          ? 'Cannot reach API at ' +
+            apiBaseUrl +
+            '. Check backend URL, deployment status, and CORS FRONTEND_URL.'
+          : error.message;
+
       setStatus({
         type: 'error',
-        message: error.message
+        message
       });
     } finally {
       setLoading(false);
